@@ -1,0 +1,99 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Navbar */
+.navbar {
+  background: #b30000;
+  color: white;
+  text-align: center;
+  padding: 15px;
+}
+
+/* Hero */
+.hero {
+  background: #f5f0e6;
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.hero h1 {
+  color: #b30000;
+  font-size: 32px;
+}
+
+.hero p {
+  margin-top: 10px;
+}
+
+.hero button {
+  background: #b30000;
+  color: white;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  margin-top: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.hero button:hover {
+  background: #800000;
+}
+
+/* Features */
+.features {
+  background: #b30000;
+  color: white;
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.features h2 {
+  font-size: 24px;
+}
+
+.feature-box {
+  margin: 25px 0;
+}
+
+/* Contact */
+.contact {
+  background: #f5f0e6;
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.contact input,
+.contact textarea {
+  display: block;
+  width: 80%;
+  margin: 10px auto;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.contact button {
+  background: #b30000;
+  color: white;
+  padding: 12px 25px;
+  border: none;
+  margin-top: 10px;
+}
+
+/* Footer */
+.footer {
+  background: #b30000;
+  color: white;
+  text-align: center;
+  padding: 15px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 22px;
+  }
+}
