@@ -1,12 +1,15 @@
 import React from "react";
-import "./styles.css";
 
-function Hero() {
+function Hero({ onShopNow }) {
   return (
     <div className="hero">
-      <h1>SHOP SMART WITH EASYSHOP</h1>
-      <p>Your online shopping hub</p>
-      <button>Shop Now</button>
+      <h1>Welcome to EASYSHOP</h1>
+      <p>Your one-stop shop</p>
+
+      {/* ✅ THIS IS REQUIRED */}
+      <button onClick={onShopNow}>
+        Shop Now
+      </button>
     </div>
   );
 }

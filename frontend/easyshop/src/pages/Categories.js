@@ -4,7 +4,7 @@ import "./category.css";
 
 const categories = [
   { name: "DRESSES", image: require("../assets/dress.jpg") },
-  { name: "ACCESSORIES", image: require("../assets/bag.jpg") },
+  { name: "BAGS", image: require("../assets/bag.jpg") },
   { name: "WATCHES", image: require("../assets/watch.jpg") },
   { name: "MOBILES", image: require("../assets/mobile.jpg") },
   { name: "LAPTOPS", image: require("../assets/laptop.jpg") },
@@ -20,8 +20,16 @@ function Categories() {
   };
 
   return (
+    
     <div className="category-container">
-      <h2>Shop by Category</h2>
+      <div className="category-header">
+  <h2>Shop by Category</h2>
+
+  <div className="auth-buttons">
+    <button>Login</button>
+    <button>Signup</button>
+  </div>
+</div>
 
       <div className="category-grid">
         {categories.map((cat) => (

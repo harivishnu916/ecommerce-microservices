@@ -17,11 +17,9 @@ function ProductCard({ product }) {
       <p>₹{product.price}</p>
 
       {/* BUTTON */}
-      <div className="qty-box">
-        <button onClick={() => setQty(qty > 0 ? qty - 1 : 0)}>-</button>
-        <span>{qty}</span>
-        <button onClick={() => setQty(qty + 1)}>+</button>
-      </div>
+      <button className="cart-btn">
+  Add to Cart
+</button>
 
     </div>
   );
