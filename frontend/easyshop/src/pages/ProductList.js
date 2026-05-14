@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 /* ---------- DRESS IMAGES ---------- */
 import dress1 from "../assets/dress1.jpg";
@@ -165,6 +166,8 @@ const products = [
 
 function ProductList() {
   const { category } = useParams();
+  
+const navigate = useNavigate();
 const [search, setSearch] = useState("");
   const filtered = products.filter(
   (p) =>
@@ -191,7 +194,7 @@ return (
 
     {/* ✅ ADD HERE */}
     <div className="cart-footer">
-      <button className="view-cart-btn">
+      <button className="view-cart-btn" onClick={() => navigate("/cart")}>
         View My Cart
       </button>
     </div>
