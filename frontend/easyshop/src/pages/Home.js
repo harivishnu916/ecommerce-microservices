@@ -11,14 +11,16 @@ function Home() {
   const navigate = useNavigate();
 
   const handleShopNow = () => {
-    navigate("/categories");  // ✅ redirect works
+    navigate("/categories");
   };
 
   return (
     <>
       <Navbar />
 
-      {/* ✅ pass function properly */}
+      {/* OPTIONAL: add signup button here */}
+      
+
       <Hero onShopNow={handleShopNow} />
 
       <Features />

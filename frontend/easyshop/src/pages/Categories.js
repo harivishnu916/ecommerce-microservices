@@ -24,13 +24,11 @@ function Categories() {
     <div className="category-container">
       <div className="category-header">
   <h2>Shop by Category</h2>
-
-  <div className="auth-buttons">
-    <button>Login</button>
-    <button>Signup</button>
   </div>
-</div>
-
+<div className="auth-buttons">
+        <button onClick={() => navigate("/login")}>Login</button>
+        <button onClick={() => navigate("/signup")}>Signup</button>
+      </div>
       <div className="category-grid">
         {categories.map((cat) => (
           <div

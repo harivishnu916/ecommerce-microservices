@@ -1,0 +1,127 @@
+/* CONTAINER */
+.signup-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 90vh;
+}
+
+/* HEADINGS */
+.signup-container h1 {
+  color: #b30000;
+  margin-bottom: 5px;
+}
+
+.signup-container h3 {
+  margin-bottom: 20px;
+}
+
+/* FORM CARD */
+.signup-form {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  width: 350px;
+}
+
+/* INPUT BOX */
+.input-box {
+  position: relative;
+  margin: 20px 0;
+}
+
+/* INPUT */
+.input-box input {
+  width: 100%;
+  padding: 12px 40px 12px 35px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+/* ICON LEFT */
+.input-box span {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* LABEL (FLOATING) */
+.input-box label {
+  position: absolute;
+  left: 35px;
+  top: 12px;
+  color: #888;
+  font-size: 14px;
+  transition: 0.2s;
+  pointer-events: none;
+}
+
+/* FLOAT EFFECT */
+.input-box input:focus + label,
+.input-box input:not(:placeholder-shown) + label {
+  top: -8px;
+  left: 30px;
+  font-size: 12px;
+  color: #b30000;
+  background: white;
+  padding: 0 5px;
+}
+
+/* PASSWORD TOGGLE */
+.toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+/* BUTTON */
+.signup-form button {
+  width: 100%;
+  padding: 12px;
+  background: #b30000;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.signup-form button:hover {
+  background: #800000;
+}
+
+/* ERROR */
+.error {
+  color: red;
+  font-size: 14px;
+}
+
+/* LOGIN TEXT */
+.login-text {
+  margin-top: 15px;
+}
+
+.login-text span {
+  color: #b30000;
+  font-weight: bold;
+  cursor: pointer;
+}
+/* Remove default browser password eye icon */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+input[type="password"]::-webkit-credentials-auto-fill-button {
+  visibility: hidden;
+  display: none !important;
+  pointer-events: none;
+}
