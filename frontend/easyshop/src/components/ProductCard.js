@@ -38,7 +38,24 @@ function ProductCard({ product }) {
 >
   Add to Cart
 </button>
+<button
+  className="wishlist-btn"
+  onClick={() => {
+    let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
 
+    const exists = wishlist.find((item) => item.id === product.id);
+
+    if (!exists) {
+      wishlist.push(product);
+      localStorage.setItem("wishlist", JSON.stringify(wishlist));
+      alert("Added to Wishlist ❤️");
+    } else {
+      alert("Already in Wishlist");
+    }
+  }}
+>
+  ❤️ Add to Wishlist
+</button>
     </div>
   );
 }

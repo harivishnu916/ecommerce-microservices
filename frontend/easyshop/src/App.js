@@ -4,12 +4,15 @@ import Categories from "./pages/Categories";
 import ProductList from "./pages/ProductList";
 import Cart from "./pages/Cart";
 import Signup from "./pages/Signup";
+import Wishlist from "./pages/Wishlist";
+
 
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/" element={<Home />} />

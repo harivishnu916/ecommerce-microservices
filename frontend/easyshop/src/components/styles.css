@@ -481,3 +481,43 @@ body {
 .checkout-btn:hover {
   background: #800000;
 }
+.wishlist-btn {
+  background: transparent;
+  color: #b30000;
+  border: 1px solid #b30000;
+  padding: 8px;
+  border-radius: 6px;
+  margin-top: 8px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.wishlist-btn:hover {
+  background: #b30000;
+  color: white;
+}
+.cart-footer {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.view-cart-btn,
+.view-wishlist-btn {
+  background: #b30000;
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.view-cart-btn,
+.view-wishlist-btn {
+  background: #b30000;
+  color: white;
+}
+
+.view-wishlist-btn {
+  opacity: 0.9;
+}

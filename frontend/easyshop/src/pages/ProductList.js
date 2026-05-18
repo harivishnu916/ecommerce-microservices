@@ -197,6 +197,12 @@ return (
       <button className="view-cart-btn" onClick={() => navigate("/cart")}>
         View My Cart
       </button>
+       <button
+    className="view-wishlist-btn"
+    onClick={() => navigate("/wishlist")}
+  >
+    View Wishlist ❤️
+  </button>
     </div>
   </div>
 );
