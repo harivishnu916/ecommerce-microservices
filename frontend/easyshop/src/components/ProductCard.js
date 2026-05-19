@@ -1,26 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./styles.css";
-import { useContext } from "react";
- 
+
 function ProductCard({ product }) {
-  const [qty, setQty] = useState(0);
+  const [wish, setWish] = useState(false);
 
-  return (
-    <div className="card">
-      
-      {/* IMAGE */}
-      <div className="img-box">
-        <img src={product.image} alt={product.name} />
-      </div>
+  // ✅ Check if item already in wishlist
+  useEffect(() => {
+    let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    const exists = wishlist.find((item) => item.id === product.id);
+    setWish(!!exists);
+  }, [product.id]);
 
-      {/* TEXT */}
-      <h3>{product.name}</h3>
-      <p>₹{product.price}</p>
-
-      {/* BUTTON */}
-     <button
-  className="cart-btn"
-  onClick={() => {
+  // ✅ ADD TO CART
+  const handleAddToCart = () => {
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
     const existing = cart.find((item) => item.id === product.id);
@@ -33,29 +25,47 @@ function ProductCard({ product }) {
 
     localStorage.setItem("cart", JSON.stringify(cart));
 
-    alert("Added to cart");
-  }}
->
-  Add to Cart
-</button>
-<button
-  className="wishlist-btn"
-  onClick={() => {
+    console.log("Added to cart"); // cleaner than alert
+  };
+
+  // ✅ TOGGLE WISHLIST
+  const handleWishlist = () => {
     let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
 
-    const exists = wishlist.find((item) => item.id === product.id);
-
-    if (!exists) {
-      wishlist.push(product);
-      localStorage.setItem("wishlist", JSON.stringify(wishlist));
-      alert("Added to Wishlist ❤️");
+    if (wish) {
+      // remove
+      wishlist = wishlist.filter((item) => item.id !== product.id);
     } else {
-      alert("Already in Wishlist");
+      // add
+      wishlist.push(product);
     }
-  }}
->
-  ❤️ Add to Wishlist
-</button>
+
+    localStorage.setItem("wishlist", JSON.stringify(wishlist));
+    setWish(!wish);
+  };
+
+  return (
+    <div className="card">
+
+      {/* IMAGE */}
+      <div className="img-box">
+        <img src={product.image} alt={product.name} />
+      </div>
+
+      {/* TEXT */}
+      <h3>{product.name}</h3>
+      <p>₹{product.price}</p>
+
+      {/* ADD TO CART */}
+      <button className="cart-btn" onClick={handleAddToCart}>
+        Add to Cart
+      </button>
+
+      {/* ❤️ WISHLIST TOGGLE */}
+      <button className="wishlist-btn" onClick={handleWishlist}>
+        {wish ? "❤️ Added" : "🤍 Add to Wishlist"}
+      </button>
+
     </div>
   );
 }

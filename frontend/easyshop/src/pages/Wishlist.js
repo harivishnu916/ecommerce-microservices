@@ -8,10 +8,32 @@ function Wishlist() {
     setWishlist(data);
   }, []);
 
+  // ❌ Remove item
   const removeItem = (id) => {
     const updated = wishlist.filter((item) => item.id !== id);
     setWishlist(updated);
     localStorage.setItem("wishlist", JSON.stringify(updated));
+  };
+
+  // 🛒 Move to cart
+  const moveToCart = (item) => {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    const existing = cart.find((c) => c.id === item.id);
+
+    if (existing) {
+      existing.qty += 1;
+    } else {
+      cart.push({
+        ...item,
+        price: Number(item.price), // ✅ FIX
+        qty: 1,
+      });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    removeItem(item.id);
   };
 
   return (
@@ -23,20 +45,34 @@ function Wishlist() {
       ) : (
         wishlist.map((item) => (
           <div className="cart-item" key={item.id}>
-            <img src={item.image} alt={item.name} width="60" />
+            
+            {/* IMAGE */}
+            <img src={item.image} alt={item.name} width="80" />
 
+            {/* DETAILS */}
             <div>
               <p>{item.name}</p>
-              <p>₹{item.price}</p>
+              <p>₹{Number(item.price)}</p>
             </div>
 
-            {/* ❌ REMOVE BUTTON */}
-            <button
-              className="remove-btn"
-              onClick={() => removeItem(item.id)}
-            >
-              Remove
-            </button>
+            {/* ACTIONS */}
+            <div className="wishlist-actions">
+              
+              <button
+                className="move-cart-btn"
+                onClick={() => moveToCart(item)}
+              >
+                🛒 Move to Cart
+              </button>
+
+              <button
+                className="remove-btn"
+                onClick={() => removeItem(item.id)}
+              >
+                Remove
+              </button>
+
+            </div>
           </div>
         ))
       )}

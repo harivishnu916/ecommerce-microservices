@@ -5,33 +5,29 @@ body {
 /* ---------- NAVBAR ---------- */
 .navbar {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   background: linear-gradient(to right, #b30000, #ff4d4d);
-  padding: 15px 20px;
+  padding: 10px 20px;
 }
 
-/* LEFT SPACE */
+/* LEFT LOGO */
 .nav-left {
-  flex: 1;
+  display: flex;
+  align-items: center;
 }
 
-/* CENTER LOGO */
 .logo {
-  flex: 1;
-  text-align: center;
   color: white;
   margin: 0;
-  font-weight: bold;
 }
 
 /* RIGHT BUTTONS */
 .nav-right {
-  flex: 1;
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
 }
-
 /* 🔴 RED BUTTONS */
 .nav-btn {
   margin-left: 10px;
@@ -520,4 +516,51 @@ body {
 
 .view-wishlist-btn {
   opacity: 0.9;
+}
+.nav-right button {
+  margin-left: 10px;
+  background: white;
+  color: #b30000;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.card:hover {
+  transform: translateY(-5px);
+  transition: 0.3s;
+}
+.wishlist-btn {
+  margin-top: 8px;
+  background: transparent;
+  color: #b30000;
+  border: 1px solid #b30000;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.wishlist-btn:hover {
+  background: #b30000;
+  color: white;
+}
+.move-cart-btn {
+  background: #b30000;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-right: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: 0.2s;
+}
+
+.move-cart-btn:hover {
+  background: #800000;
+  transform: scale(1.05);
 }
