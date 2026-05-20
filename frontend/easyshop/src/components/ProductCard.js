@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./styles.css";
-
+import { useNavigate } from "react-router-dom";
 function ProductCard({ product }) {
   const [wish, setWish] = useState(false);
-
+const navigate = useNavigate();
   // ✅ Check if item already in wishlist
   useEffect(() => {
     let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
@@ -65,7 +65,27 @@ function ProductCard({ product }) {
       <button className="wishlist-btn" onClick={handleWishlist}>
         {wish ? "❤️ Added" : "🤍 Add to Wishlist"}
       </button>
+<button
+  className="buy-btn"
+  onClick={() => {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
+    const existing = cart.find((item) => item.id === product.id);
+
+    if (existing) {
+      existing.qty += 1;
+    } else {
+      cart.push({ ...product, price: Number(product.price), qty: 1 });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    // go to checkout
+    window.location.href = "/checkout";
+  }}
+>
+  Buy Now
+</button>
     </div>
   );
 }

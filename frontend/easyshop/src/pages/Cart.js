@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 function Cart() {
   const [cart, setCart] = useState([]);
-
+const navigate = useNavigate();
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("cart")) || [];
     setCart(data);
@@ -70,9 +72,12 @@ function Cart() {
           <div className="cart-summary">
             <h3>Total: ₹{total}</h3>
 
-            <button className="checkout-btn">
-              Proceed to Checkout
-            </button>
+           <button
+  className="checkout-btn"
+  onClick={() => navigate("/checkout")}
+>
+  Proceed to Checkout
+</button>
           </div>
         </>
       )}

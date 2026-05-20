@@ -564,3 +564,17 @@ body {
   background: #800000;
   transform: scale(1.05);
 }
+.buy-btn {
+  background: #ff9900;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.buy-btn:hover {
+  background: #e68a00;
+}

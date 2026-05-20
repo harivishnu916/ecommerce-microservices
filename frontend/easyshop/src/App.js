@@ -5,6 +5,8 @@ import ProductList from "./pages/ProductList";
 import Cart from "./pages/Cart";
 import Signup from "./pages/Signup";
 import Wishlist from "./pages/Wishlist";
+import Checkout from "./pages/Checkout";
+
 
 
 
@@ -12,6 +14,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/checkout" element={<Checkout />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/cart" element={<Cart />} />
