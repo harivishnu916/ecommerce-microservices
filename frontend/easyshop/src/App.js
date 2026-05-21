@@ -6,14 +6,16 @@ import Cart from "./pages/Cart";
 import Signup from "./pages/Signup";
 import Wishlist from "./pages/Wishlist";
 import Checkout from "./pages/Checkout";
-
-
-
+import Success from "./pages/Success";
+import Orders from "./pages/Orders";
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
+      <Routes> 
+        <Route path="/orders" element={<Orders />} />
+       
+        <Route path="/success" element={<Success />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/signup" element={<Signup />} />
