@@ -39,7 +39,9 @@ useEffect(() => {
 <button className="icon-btn" onClick={() => navigate("/cart")}>
   🛒 <span>{cartCount}</span>
 </button>
-    <button>Login</button>
+    <button onClick={() => navigate("/login")}>
+  Login
+</button>
     <button onClick={() => navigate("/signup")}>
   Signup
 </button>

@@ -56,13 +56,14 @@ function Checkout() {
 
    // 🆕 create order
 const newOrder = {
-  id: "ORD" + Date.now(),   // unique order id
+  id: "ORD" + Date.now(),
   items: items,
   total: total,
   date: new Date().toLocaleDateString(),
   delivery: new Date(
     Date.now() + 3 * 24 * 60 * 60 * 1000
-  ).toLocaleDateString(), // +3 days
+  ).toLocaleDateString(),
+  status: "Pending",   // 🔥 NEW
 };
 
 // save orders
