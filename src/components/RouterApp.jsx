@@ -1,35 +1,60 @@
-import { Routes, Route } from "react-router-dom";
+import React, {
+  lazy,
+  Suspense
+} from "react";
+
+import {
+  Routes,
+  Route
+} from "react-router-dom";
+
+/* NORMAL LOAD */
 
 import ProductList from "./ProductList";
-import ProductDetail from "./ProductDetail";
-import PaymentPage from "./PaymentPage";
+
+/* LAZY LOAD */
+
+const ProductDetail = lazy(() =>
+  import("./ProductDetail")
+);
+
+const PaymentPage = lazy(() =>
+  import("./PaymentPage")
+);
 
 function RouterApp() {
 
   return (
 
-    <Routes>
+    <Suspense
+      fallback={<h1>Loading...</h1>}
+    >
 
-      <Route
-        path="/"
-        element={<ProductList />}
-      />
+      <Routes>
 
-      <Route
-        path="/:category"
-        element={<ProductList />}
-      />
+        <Route
+          path="/"
+          element={<ProductList />}
+        />
 
-      <Route
-        path="/product/:id"
-        element={<ProductDetail />}
-      />
-      <Route
-  path="/payment"
-  element={<PaymentPage />}
-/>
+        <Route
+          path="/:category"
+          element={<ProductList />}
+        />
 
-    </Routes>
+        <Route
+          path="/product/:id"
+          element={<ProductDetail />}
+        />
+
+        <Route
+          path="/payment"
+          element={<PaymentPage />}
+        />
+
+      </Routes>
+
+    </Suspense>
 
   )
 }

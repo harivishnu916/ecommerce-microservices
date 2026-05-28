@@ -295,7 +295,35 @@ const bagItems = [
 
 /* ---------- WATCHES ---------- */
 const watchItems = [
-  { id: 200, name: "mens fastrack watch",title:"hero", category: "WATCHES", price: 1299, image: watch1 },
+ {
+  id: 200,
+
+  name: "mens fastrack watch",
+
+  category: "WATCHES",
+
+  title:
+    "Fastrack Analog Unisex-Adult Watch",
+
+  caseDiameter: "49 Millimetres",
+
+  bandColour: "Gray",
+
+  bandMaterialType: "Silicone",
+
+  warrantyType: "Manufacturer",
+
+  watchMovementType: "Quartz",
+
+  itemWeight: "150 Grams",
+
+  countryOfOrigin: "India",
+
+  price: 1999,
+
+  image: watch1
+},
+    
   { id: 201, name: "stylish watch for men", category: "WATCHES", price: 699, image: watch2 },
   {
   id: 202,
