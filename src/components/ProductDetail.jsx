@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import {
   useParams,
@@ -7,24 +7,71 @@ import {
 
 import "./ProductDetail.css";
 
-import { products } from "./ProductList";
-
 
 function ProductDetail() {
 
   const { id } = useParams();
-    const navigate = useNavigate();
 
-  const product = products.find(
-    (p) => p.id === Number(id)
-  );
+  const navigate = useNavigate();
+
+  const [product, setProduct] = useState(null);
 
   const [selectedVariant, setSelectedVariant]
     = useState("");
 
+  useEffect(() => {
+
+    fetch(`http://localhost:8080/products/${id}`)
+
+      .then((res) => res.json())
+
+      .then((data) => {
+
+        setProduct(data);
+
+      })
+
+      .catch((error) => {
+
+        console.log(error);
+
+      });
+
+  }, [id]);
+ console.log(product);
+  const addToCart = () => {
+    
+
+    fetch("http://localhost:8080/cart", {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+
+        productId: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        quantity: 1
+
+      })
+
+    });
+
+  };
+
+  console.log(product);
+
+ 
   if (!product) {
 
-    return <h2>Product Not Found</h2>;
+    return <h2>Loading...</h2>;
+   
+
   }
 
   return (
@@ -35,10 +82,11 @@ function ProductDetail() {
 
       <div className="detail-image">
 
-        <img
-          src={product.image}
-          alt={product.name}
-        />
+       <img
+  src={`http://localhost:8080${product.image}`}
+  alt={product.name}
+ 
+/>
 
       </div>
 
@@ -168,22 +216,21 @@ function ProductDetail() {
 
             <div>
 
-              {product.variants.map((v, index) => (
+            {product.variants
+  .split(",")
+  .map((v, index) => (
 
-                <button
-                  key={index}
-                  className="variant-btn"
+    <button
+      key={index}
+      className="variant-btn"
+      onClick={() =>
+        setSelectedVariant(v)
+      }
+    >
+      {v}
+    </button>
 
-                  onClick={() =>
-                    setSelectedVariant(v)
-                  }
-                >
-
-                  {v}
-
-                </button>
-
-              ))}
+))}
 
             </div>
 
@@ -207,14 +254,14 @@ function ProductDetail() {
         {product.EarPlacement && (
           <p>
             <b>Ear Placement:</b>
-            {product.EarPlacement}
+             {product.earPlacement}
           </p>
         )}
 
         {product.Impedance && (
           <p>
             <b>Impedance:</b>
-            {product.Impedance}
+            {product.impedance}
           </p>
         )}
 
@@ -227,12 +274,7 @@ function ProductDetail() {
           </p>
         )}
 
-        {product.connectivityTechnology && (
-          <p>
-            <b>Connectivity:</b>
-            {product.connectivityTechnology}
-          </p>
-        )}
+      
 
         {product.WirelessCommunicationStandard && (
           <p>
@@ -275,13 +317,38 @@ function ProductDetail() {
             {product.bandWidth}
           </p>
         )}
+        {product.itemWeight && (
+  <p>
+    <b>Item Weight:</b> {product.itemWeight}
+  </p>
+)}
 
-        {product.countryOfOrigin && (
-          <p>
-            <b>Country:</b>
-            {product.countryOfOrigin}
-          </p>
-        )}
+{product.bandColour && (
+  <p>
+    <b>Band Colour:</b> {product.bandColour}
+  </p>
+)}
+
+{product.bandMaterialType && (
+  <p>
+    <b>Band Material:</b> {product.bandMaterialType}
+  </p>
+)}
+
+{product.warrantyType && (
+  <p>
+    <b>Warranty Type:</b> {product.warrantyType}
+  </p>
+)}
+{product.connectivityTechnology && (
+  <p>
+    <b>Connectivity:</b> {product.connectivityTechnology}
+  </p>
+)}
+
+
+
+       
 
         {/* SPECIAL FEATURE */}
 
@@ -291,179 +358,88 @@ function ProductDetail() {
             {product.specialFeature}
           </p>
         )}
-        {/* DRESS DETAILS */}
+       
 
-{product.Neckstyle && (
+{/* DRESS DETAILS */}
+    {product.neckStyle && (
   <p>
-
-    <b>Neck Style:</b>
-
-    {product.Neckstyle}
-
+    <b>Neck Style:</b> {product.neckStyle}
   </p>
 )}
 
-{product.Fittype && (
+{product.fitType && (
   <p>
-
-    <b>Fit Type:</b>
-
-    {product.Fittype}
-
+    <b>Fit Type:</b> {product.fitType}
   </p>
 )}
 
-{product.Closuretype && (
+{product.closureType && (
   <p>
-
-    <b>Closure Type:</b>
-
-    {product.Closuretype}
-
+    <b>Closure Type:</b> {product.closureType}
   </p>
 )}
 
-{product.Materialcomposition && (
+{product.materialComposition && (
   <p>
-
-    <b>Material:</b>
-
-    {product.Materialcomposition}
-
+    <b>Material:</b> {product.materialComposition}
   </p>
 )}
 
-{product.Sleevetype && (
+{product.sleeveType && (
   <p>
-
-    <b>Sleeve Type:</b>
-
-    {product.Sleevetype}
-
+    <b>Sleeve Type:</b> {product.sleeveType}
   </p>
 )}
 
-{product.Length && (
+{product.style && (
   <p>
-
-    <b>Length:</b>
-
-    {product.Length}
-
+    <b>Style:</b> {product.style}
   </p>
 )}
 
-{product.Pattern && (
+{product.careInstructions && (
   <p>
-
-    <b>Pattern:</b>
-
-    {product.Pattern}
-
+    <b>Care Instructions:</b> {product.careInstructions}
   </p>
 )}
 
-{product.Style && (
+{product.countryOfOrigin && (
   <p>
-
-    <b>Style:</b>
-
-    {product.Style}
-
+    <b>Country:</b> {product.countryOfOrigin}
   </p>
 )}
 
-{product.Careinstructions && (
-  <p>
 
-    <b>Care Instructions:</b>
 
-    {product.Careinstructions}
 
-  </p>
-)}
-
-{product.CountryofOrigin && (
-  <p>
-
-    <b>Country:</b>
-
-    {product.CountryofOrigin}
-
-  </p>
-)}
-
-{product.DressFrontLength && (
-  <p>
-
-    <b>Dress Front Length:</b>
-
-    {product.DressFrontLength}
-
-  </p>
-)}
-
-{product.DressBack && (
-  <p>
-
-    <b>Dress Back:</b>
-
-    {product.DressBack}
-
-  </p>
-)}
-
-{product.SleevesLength && (
-  <p>
-
-    <b>Sleeves Length:</b>
-
-    {product.SleevesLength}
-
-  </p>
-)}
-
-{product.ShirtLength && (
-  <p>
-
-    <b>Shirt Length:</b>
-
-    {product.ShirtLength}
-
-  </p>
-)}
 
         {/* BUTTONS */}
 
-   <button
+  <button
   className="buy-btn"
-
   onClick={() =>
     navigate("/payment", {
       state: { product }
     })
   }
 >
-
   Buy Now
-
-</button>
-<button
+  </button>
+  <button
   className="cart-btn"
-
-  onClick={() =>
-    navigate("/cart")
-  }
+  onClick={() => {
+    addToCart();
+    navigate("/cart");
+  }}
 >
-
   Add To Cart
-
 </button>
 
-      </div>
+</div>
 
-    </div>
 
+
+</div>
   )
 }
 

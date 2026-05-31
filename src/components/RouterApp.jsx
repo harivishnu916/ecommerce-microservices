@@ -11,6 +11,8 @@ import {
 /* NORMAL LOAD */
 
 import ProductList from "./ProductList";
+import Cart from "./Cart";
+
 
 /* LAZY LOAD */
 
@@ -50,6 +52,11 @@ function RouterApp() {
         <Route
           path="/payment"
           element={<PaymentPage />}
+        />
+
+         <Route
+          path="/cart"
+          element={<Cart/>}
         />
 
       </Routes>
