@@ -7,7 +7,7 @@ function ProductCard({ product }) {
     <div className="card">
 
       <div className="img-box">
-       <img src={"http://localhost:8080"+product.image} alt={product.name} />
+       <img src={"http://localhost:8081"+product.image} alt={product.name} />
           
       </div>
 

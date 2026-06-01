@@ -21,7 +21,7 @@ function ProductDetail() {
 
   useEffect(() => {
 
-    fetch(`http://localhost:8080/products/${id}`)
+    fetch(`http://localhost:8081/products/${id}`)
 
       .then((res) => res.json())
 
@@ -38,11 +38,11 @@ function ProductDetail() {
       });
 
   }, [id]);
- console.log(product);
+  console.log(product);
   const addToCart = () => {
-    
 
-    fetch("http://localhost:8080/cart", {
+
+    fetch("http://localhost:8081/cart", {
 
       method: "POST",
 
@@ -66,11 +66,11 @@ function ProductDetail() {
 
   console.log(product);
 
- 
+
   if (!product) {
 
     return <h2>Loading...</h2>;
-   
+
 
   }
 
@@ -82,11 +82,11 @@ function ProductDetail() {
 
       <div className="detail-image">
 
-       <img
-  src={`http://localhost:8080${product.image}`}
-  alt={product.name}
- 
-/>
+        <img
+          src={`http://localhost:8081${product.image}`}
+          alt={product.name}
+
+        />
 
       </div>
 
@@ -216,21 +216,21 @@ function ProductDetail() {
 
             <div>
 
-            {product.variants
-  .split(",")
-  .map((v, index) => (
+              {product.variants
+                .split(",")
+                .map((v, index) => (
 
-    <button
-      key={index}
-      className="variant-btn"
-      onClick={() =>
-        setSelectedVariant(v)
-      }
-    >
-      {v}
-    </button>
+                  <button
+                    key={index}
+                    className="variant-btn"
+                    onClick={() =>
+                      setSelectedVariant(v)
+                    }
+                  >
+                    {v}
+                  </button>
 
-))}
+                ))}
 
             </div>
 
@@ -254,7 +254,7 @@ function ProductDetail() {
         {product.EarPlacement && (
           <p>
             <b>Ear Placement:</b>
-             {product.earPlacement}
+            {product.earPlacement}
           </p>
         )}
 
@@ -274,7 +274,7 @@ function ProductDetail() {
           </p>
         )}
 
-      
+
 
         {product.WirelessCommunicationStandard && (
           <p>
@@ -318,37 +318,37 @@ function ProductDetail() {
           </p>
         )}
         {product.itemWeight && (
-  <p>
-    <b>Item Weight:</b> {product.itemWeight}
-  </p>
-)}
+          <p>
+            <b>Item Weight:</b> {product.itemWeight}
+          </p>
+        )}
 
-{product.bandColour && (
-  <p>
-    <b>Band Colour:</b> {product.bandColour}
-  </p>
-)}
+        {product.bandColour && (
+          <p>
+            <b>Band Colour:</b> {product.bandColour}
+          </p>
+        )}
 
-{product.bandMaterialType && (
-  <p>
-    <b>Band Material:</b> {product.bandMaterialType}
-  </p>
-)}
+        {product.bandMaterialType && (
+          <p>
+            <b>Band Material:</b> {product.bandMaterialType}
+          </p>
+        )}
 
-{product.warrantyType && (
-  <p>
-    <b>Warranty Type:</b> {product.warrantyType}
-  </p>
-)}
-{product.connectivityTechnology && (
-  <p>
-    <b>Connectivity:</b> {product.connectivityTechnology}
-  </p>
-)}
+        {product.warrantyType && (
+          <p>
+            <b>Warranty Type:</b> {product.warrantyType}
+          </p>
+        )}
+        {product.connectivityTechnology && (
+          <p>
+            <b>Connectivity:</b> {product.connectivityTechnology}
+          </p>
+        )}
 
 
 
-       
+
 
         {/* SPECIAL FEATURE */}
 
@@ -358,56 +358,56 @@ function ProductDetail() {
             {product.specialFeature}
           </p>
         )}
-       
 
-{/* DRESS DETAILS */}
-    {product.neckStyle && (
-  <p>
-    <b>Neck Style:</b> {product.neckStyle}
-  </p>
-)}
 
-{product.fitType && (
-  <p>
-    <b>Fit Type:</b> {product.fitType}
-  </p>
-)}
+        {/* DRESS DETAILS */}
+        {product.neckStyle && (
+          <p>
+            <b>Neck Style:</b> {product.neckStyle}
+          </p>
+        )}
 
-{product.closureType && (
-  <p>
-    <b>Closure Type:</b> {product.closureType}
-  </p>
-)}
+        {product.fitType && (
+          <p>
+            <b>Fit Type:</b> {product.fitType}
+          </p>
+        )}
 
-{product.materialComposition && (
-  <p>
-    <b>Material:</b> {product.materialComposition}
-  </p>
-)}
+        {product.closureType && (
+          <p>
+            <b>Closure Type:</b> {product.closureType}
+          </p>
+        )}
 
-{product.sleeveType && (
-  <p>
-    <b>Sleeve Type:</b> {product.sleeveType}
-  </p>
-)}
+        {product.materialComposition && (
+          <p>
+            <b>Material:</b> {product.materialComposition}
+          </p>
+        )}
 
-{product.style && (
-  <p>
-    <b>Style:</b> {product.style}
-  </p>
-)}
+        {product.sleeveType && (
+          <p>
+            <b>Sleeve Type:</b> {product.sleeveType}
+          </p>
+        )}
 
-{product.careInstructions && (
-  <p>
-    <b>Care Instructions:</b> {product.careInstructions}
-  </p>
-)}
+        {product.style && (
+          <p>
+            <b>Style:</b> {product.style}
+          </p>
+        )}
 
-{product.countryOfOrigin && (
-  <p>
-    <b>Country:</b> {product.countryOfOrigin}
-  </p>
-)}
+        {product.careInstructions && (
+          <p>
+            <b>Care Instructions:</b> {product.careInstructions}
+          </p>
+        )}
+
+        {product.countryOfOrigin && (
+          <p>
+            <b>Country:</b> {product.countryOfOrigin}
+          </p>
+        )}
 
 
 
@@ -415,31 +415,31 @@ function ProductDetail() {
 
         {/* BUTTONS */}
 
-  <button
-  className="buy-btn"
-  onClick={() =>
-    navigate("/payment", {
-      state: { product }
-    })
-  }
->
-  Buy Now
-  </button>
-  <button
-  className="cart-btn"
-  onClick={() => {
-    addToCart();
-    navigate("/cart");
-  }}
->
-  Add To Cart
-</button>
+        <button
+          className="buy-btn"
+          onClick={() =>
+            navigate("/payment", {
+              state: { product }
+            })
+          }
+        >
+          Buy Now
+        </button>
+        <button
+          className="cart-btn"
+          onClick={() => {
+            addToCart();
+            navigate("/cart");
+          }}
+        >
+          Add To Cart
+        </button>
 
-</div>
+      </div>
 
 
 
-</div>
+    </div>
   )
 }
 

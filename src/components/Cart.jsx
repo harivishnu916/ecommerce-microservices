@@ -11,7 +11,7 @@ function Cart() {
   useEffect(() => {
     
 
-    fetch("http://localhost:8080/cart")
+    fetch("http://localhost:8081/cart")
       .then((res) => res.json())
       .then((data) => {
         setCart(data);
@@ -24,7 +24,7 @@ function Cart() {
 
   const removeItem = (id) => {
 
-    fetch(`http://localhost:8080/cart/${id}`, {
+    fetch(`http://localhost:8081/cart/${id}`, {
       method: "DELETE"
     })
       .then(() => {
@@ -60,7 +60,7 @@ function Cart() {
         {cart.map((item) => (
           <div className="cart-item" key={item.id}>
             <img
-              src={`http://localhost:8080${item.image}`}
+              src={`http://localhost:8081${item.image}`}
               alt={item.name}
             />
 

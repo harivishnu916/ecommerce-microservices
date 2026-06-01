@@ -16,7 +16,7 @@ function ProductList() {
 
   useEffect(() => {
 
-    fetch("http://localhost:8080/products")
+    fetch("http://localhost:8081/products")
 
       .then((res) => res.json())
 
@@ -47,7 +47,8 @@ return (
 
     <Navbar />
 
-    <div className="container">
+  ``
+ <div className="container">
 
       <h2>{category}</h2>
     
@@ -62,7 +63,8 @@ return (
         className="search-bar"
       />
 
-      </div>
+      </div> 
+```
 
    
 
