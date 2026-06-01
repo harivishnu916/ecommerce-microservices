@@ -2,6 +2,7 @@ package com.example.auth_service.service;
 
 import com.example.auth_service.model.User;
 import com.example.auth_service.repository.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -10,28 +11,27 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository repo;
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public UserService(UserRepository repo) {
         this.repo = repo;
     }
 
-    // ✅ SIGNUP
     public User signup(User user) {
+        user.setPassword(encoder.encode(user.getPassword()));
         return repo.save(user);
     }
 
-    // ✅ LOGIN
     public Optional<User> login(String email, String password) {
         Optional<User> user = repo.findByEmail(email);
 
-        if (user.isPresent() && user.get().getPassword().equals(password)) {
+        if (user.isPresent() && encoder.matches(password, user.get().getPassword())) {
             return user;
         }
 
         return Optional.empty();
     }
 
-    // 🔥 NEW METHOD (IMPORTANT)
     public Optional<User> findByEmail(String email) {
         return repo.findByEmail(email);
     }

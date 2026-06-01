@@ -5,37 +5,31 @@ import com.example.auth_service.security.JwtUtil;
 import com.example.auth_service.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin
 public class AuthController {
 
-    private final UserService service;
+    private final UserService userService;
 
-    public AuthController(UserService service) {
-        this.service = service;
+    public AuthController(UserService userService) {
+        this.userService = userService;
     }
 
-    // SIGNUP
     @PostMapping("/signup")
     public User signup(@RequestBody User user) {
-        return service.signup(user);
+        return userService.signup(user);
     }
 
-    // LOGIN
     @PostMapping("/login")
-    public Map<String, String> login(@RequestBody User user) {
+    public String login(@RequestBody User user) {
+        Optional<User> u = userService.login(user.getEmail(), user.getPassword());
 
-        Optional<User> found = service.login(user.getEmail(), user.getPassword());
-
-        if (found.isPresent()) {
-            String token = JwtUtil.generateToken(user.getEmail());
-            return Map.of("token", token);
+        if (u.isPresent()) {
+            return JwtUtil.generateToken(user.getEmail());
         }
 
-        throw new RuntimeException("Invalid credentials");
+        return "Invalid credentials";
     }
 }

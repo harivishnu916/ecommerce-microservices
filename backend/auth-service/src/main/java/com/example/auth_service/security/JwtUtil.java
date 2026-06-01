@@ -8,7 +8,7 @@ import java.util.Date;
 
 public class JwtUtil {
 
-    private static final String SECRET = "mysecretkeymysecretkeymysecretkey"; // must be long
+    private static final String SECRET = "mysecretkeymysecretkeymysecretkey";
     private static final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
 
     public static String generateToken(String email) {
@@ -31,7 +31,10 @@ public class JwtUtil {
 
     public static boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token);
             return true;
         } catch (Exception e) {
             return false;
