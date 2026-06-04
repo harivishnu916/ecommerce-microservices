@@ -21,78 +21,121 @@ function Checkout() {
     setItems(cart);
   }, []);
 
-  // REMOVE ITEM
+  // ❌ REMOVE ITEM
   const removeItem = (id) => {
     const updated = items.filter((item) => item.id !== id);
     setItems(updated);
     localStorage.setItem("cart", JSON.stringify(updated));
   };
 
-  // TOTAL
+  // ✅ TOTAL
   const total = items.reduce((sum, item) => {
     const price = Number(item.price) || 0;
     const qty = item.qty || 1;
     return sum + price * qty;
   }, 0);
 
-  // validate form helper
-  const validateForm = () => {
-    if (!form.name || !form.mobile || !form.address) {
-      setError("Please fill all details before selecting payment");
-      return false;
-    }
-    if (form.mobile.length !== 10) {
-      setError("Mobile must be 10 digits");
-      return false;
-    }
-    return true;
-  };
-
-  // FINAL ORDER FLOW (COD only reaches here)
+  // ✅ FINAL ORDER FLOW
   const handlePlaceOrder = () => {
     if (!form.name || !form.mobile || !form.address) {
       setError("Please fill all details");
       return;
     }
+
     if (form.mobile.length !== 10) {
       setError("Mobile must be 10 digits");
       return;
     }
+
     if (!payment) {
       setError("Please select payment method");
       return;
     }
 
-    // safety net — if upi/card somehow selected, redirect
-    if (payment === "card") {
-      navigate("/card-payment", { state: { total, items, form } });
-      return;
-    }
-    if (payment === "upi") {
-      navigate("/upi-payment", { state: { total, items, form } });
-      return;
-    }
-
     setError("");
 
-    // COD only reaches here
-    const newOrder = {
-      id: "ORD" + Date.now(),
-      items: items,
-      total: total,
-      date: new Date().toLocaleDateString(),
-      delivery: new Date(
-        Date.now() + 3 * 24 * 60 * 60 * 1000,
-      ).toLocaleDateString(),
-      status: "Pending",
-      paymentMethod: "Cash on Delivery",
-    };
+   // 🆕 create order
+// 🆕 create order
+const newOrder = {
+  id: "ORD" + Date.now(),
+  items: items,
+  total: total,
+  date: new Date().toLocaleDateString(),
+  delivery: new Date(
+    Date.now() + 3 * 24 * 60 * 60 * 1000
+  ).toLocaleDateString(),
+  status: "Pending",
+};
 
-    let orders = JSON.parse(localStorage.getItem("orders")) || [];
-    orders.push(newOrder);
-    localStorage.setItem("orders", JSON.stringify(orders));
-    localStorage.removeItem("cart");
-    navigate("/success", { state: newOrder });
+// CARD PAYMENT
+if (payment === "card") {
+  navigate("/card-payment", {
+    state: {
+      total,
+      items,
+      form,
+    },
+  });
+  return;
+}
+
+// UPI PAYMENT
+if (payment === "upi") {
+  navigate("/upi-payment", {
+    state: {
+      total,
+      items,
+      form,
+    },
+  });
+  return;
+}
+
+// CASH ON DELIVERY
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+orders.push(newOrder);
+
+localStorage.setItem(
+  "orders",
+  JSON.stringify(orders)
+);
+
+localStorage.removeItem("cart");
+
+navigate("/success", {
+  state: newOrder,
+});
+
+
+
+
+// CARD PAYMENT
+if (payment === "card") {
+  navigate("/card-payment", {
+    state: {
+      total: total,
+      items: items,
+      form: form,
+    },
+  });
+  return;
+}
+
+// UPI PAYMENT
+if (payment === "upi") {
+  navigate("/upi-payment", {
+    state: {
+      total: total,
+      items: items,
+      form: form,
+    },
+  });
+  return;
+}
+
+// CASH ON DELIVERY
+
   };
 
   return (
@@ -107,11 +150,13 @@ function Checkout() {
           {items.map((item) => (
             <div className="cart-item" key={item.id}>
               <img src={item.image} alt={item.name} width="80" />
+
               <div>
                 <p>{item.name}</p>
                 <p>₹{item.price}</p>
                 <p>Qty: {item.qty}</p>
               </div>
+
               <button
                 className="remove-btn"
                 onClick={() => removeItem(item.id)}
@@ -125,14 +170,18 @@ function Checkout() {
           <h3>Total: ₹{total}</h3>
 
           {/* PROCEED */}
-          <button className="checkout-btn" onClick={() => setShowForm(true)}>
+          <button
+            className="checkout-btn"
+            onClick={() => setShowForm(true)}
+          >
             Proceed to Buy ({items.length} items)
           </button>
 
           {/* FORM */}
           {showForm && (
             <div className="checkout-form">
-              {/* ERROR MESSAGE */}
+
+              {/* 🔥 ERROR MESSAGE */}
               {error && <p className="error">{error}</p>}
 
               <h3>Enter Delivery Details</h3>
@@ -151,7 +200,6 @@ function Checkout() {
                 type="text"
                 placeholder="Mobile Number"
                 value={form.mobile}
-                maxLength={10}
                 onChange={(e) => {
                   setForm({ ...form, mobile: e.target.value });
                   setError("");
@@ -172,7 +220,6 @@ function Checkout() {
               <h4>Payment Method</h4>
 
               <div className="payment-option-box">
-                {/* COD */}
                 <div
                   className={`pay-box ${payment === "cod" ? "active" : ""}`}
                   onClick={() => {
@@ -183,37 +230,32 @@ function Checkout() {
                   Cash on Delivery
                 </div>
 
-                {/* ✅ UPI - validates first, then navigates */}
                 <div
                   className={`pay-box ${payment === "upi" ? "active" : ""}`}
                   onClick={() => {
-                    setError("");
-                    if (!validateForm()) return;
                     setPayment("upi");
-                    navigate("/upi-payment", { state: { total, items, form } });
+                    setError("");
                   }}
                 >
                   UPI
                 </div>
 
-                {/* ✅ CARD - validates first, then navigates */}
                 <div
                   className={`pay-box ${payment === "card" ? "active" : ""}`}
                   onClick={() => {
-                    setError("");
-                    if (!validateForm()) return;
                     setPayment("card");
-                    navigate("/card-payment", {
-                      state: { total, items, form },
-                    });
+                    setError("");
                   }}
                 >
                   Card
                 </div>
               </div>
 
-              {/* PLACE ORDER (COD only) */}
-              <button className="checkout-btn" onClick={handlePlaceOrder}>
+              {/* PLACE ORDER */}
+              <button
+                className="checkout-btn"
+                onClick={handlePlaceOrder}
+              >
                 Place Order
               </button>
             </div>
