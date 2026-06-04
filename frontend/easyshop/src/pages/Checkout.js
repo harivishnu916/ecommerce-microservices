@@ -35,32 +35,47 @@ function Checkout() {
     return sum + price * qty;
   }, 0);
 
-  // FINAL ORDER FLOW (COD and UPI only)
+  // validate form helper
+  const validateForm = () => {
+    if (!form.name || !form.mobile || !form.address) {
+      setError("Please fill all details before selecting payment");
+      return false;
+    }
+    if (form.mobile.length !== 10) {
+      setError("Mobile must be 10 digits");
+      return false;
+    }
+    return true;
+  };
+
+  // FINAL ORDER FLOW (COD only reaches here)
   const handlePlaceOrder = () => {
     if (!form.name || !form.mobile || !form.address) {
       setError("Please fill all details");
       return;
     }
-
     if (form.mobile.length !== 10) {
       setError("Mobile must be 10 digits");
       return;
     }
-
     if (!payment) {
       setError("Please select payment method");
       return;
     }
 
-    // ✅ FIX: if card is somehow selected, redirect to card page instead
+    // safety net — if upi/card somehow selected, redirect
     if (payment === "card") {
       navigate("/card-payment", { state: { total, items, form } });
+      return;
+    }
+    if (payment === "upi") {
+      navigate("/upi-payment", { state: { total, items, form } });
       return;
     }
 
     setError("");
 
-    // create order (COD / UPI only reaches here)
+    // COD only reaches here
     const newOrder = {
       id: "ORD" + Date.now(),
       items: items,
@@ -70,18 +85,13 @@ function Checkout() {
         Date.now() + 3 * 24 * 60 * 60 * 1000,
       ).toLocaleDateString(),
       status: "Pending",
-      paymentMethod: payment === "cod" ? "Cash on Delivery" : "UPI",
+      paymentMethod: "Cash on Delivery",
     };
 
-    // save order
     let orders = JSON.parse(localStorage.getItem("orders")) || [];
     orders.push(newOrder);
     localStorage.setItem("orders", JSON.stringify(orders));
-
-    // clear cart
     localStorage.removeItem("cart");
-
-    // go to success page
     navigate("/success", { state: newOrder });
   };
 
@@ -173,12 +183,14 @@ function Checkout() {
                   Cash on Delivery
                 </div>
 
-                {/* UPI */}
+                {/* ✅ UPI - validates first, then navigates */}
                 <div
                   className={`pay-box ${payment === "upi" ? "active" : ""}`}
                   onClick={() => {
-                    setPayment("upi");
                     setError("");
+                    if (!validateForm()) return;
+                    setPayment("upi");
+                    navigate("/upi-payment", { state: { total, items, form } });
                   }}
                 >
                   UPI
@@ -189,20 +201,7 @@ function Checkout() {
                   className={`pay-box ${payment === "card" ? "active" : ""}`}
                   onClick={() => {
                     setError("");
-
-                    // ✅ validate form BEFORE setting payment (state is async)
-                    if (!form.name || !form.mobile || !form.address) {
-                      setError(
-                        "Please fill all details before selecting payment",
-                      );
-                      return;
-                    }
-                    if (form.mobile.length !== 10) {
-                      setError("Mobile must be 10 digits");
-                      return;
-                    }
-
-                    // ✅ form is valid — select card and navigate
+                    if (!validateForm()) return;
                     setPayment("card");
                     navigate("/card-payment", {
                       state: { total, items, form },
@@ -213,7 +212,7 @@ function Checkout() {
                 </div>
               </div>
 
-              {/* PLACE ORDER (COD / UPI only) */}
+              {/* PLACE ORDER (COD only) */}
               <button className="checkout-btn" onClick={handlePlaceOrder}>
                 Place Order
               </button>
