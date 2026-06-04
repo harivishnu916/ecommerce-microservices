@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios";
 /* ---------- DRESS IMAGES ---------- */
 import dress1 from "../assets/dress1.jpg";
 import dress2 from "../assets/dress2.jpg";
@@ -70,6 +70,7 @@ import earphone4 from "../assets/earphone4.jpg";
 import earphone5 from "../assets/earphone5.jpg";
 import earphone6 from "../assets/earphone6.jpg";
 import earphone7 from "../assets/earphone7.jpg";
+import { useEffect } from "react";
 
 /* ---------- DRESSES ---------- */
 const dressItems = [
@@ -165,11 +166,12 @@ const products = [
 ];
 
 function ProductList() {
+  
   const { category } = useParams();
   
 const navigate = useNavigate();
 const [search, setSearch] = useState("");
-  const filtered = products.filter(
+const filtered = products.filter(
   (p) =>
     p.category === category &&
     p.name.toLowerCase().includes(search.toLowerCase())
