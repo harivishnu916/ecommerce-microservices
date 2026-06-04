@@ -21,21 +21,21 @@ function Checkout() {
     setItems(cart);
   }, []);
 
-  // ❌ REMOVE ITEM
+  // REMOVE ITEM
   const removeItem = (id) => {
     const updated = items.filter((item) => item.id !== id);
     setItems(updated);
     localStorage.setItem("cart", JSON.stringify(updated));
   };
 
-  // ✅ TOTAL
+  // TOTAL
   const total = items.reduce((sum, item) => {
     const price = Number(item.price) || 0;
     const qty = item.qty || 1;
     return sum + price * qty;
   }, 0);
 
-  // ✅ FINAL ORDER FLOW
+  // FINAL ORDER FLOW (COD and UPI only)
   const handlePlaceOrder = () => {
     if (!form.name || !form.mobile || !form.address) {
       setError("Please fill all details");
@@ -52,30 +52,37 @@ function Checkout() {
       return;
     }
 
+    // ✅ FIX: if card is somehow selected, redirect to card page instead
+    if (payment === "card") {
+      navigate("/card-payment", { state: { total, items, form } });
+      return;
+    }
+
     setError("");
 
-   // 🆕 create order
-const newOrder = {
-  id: "ORD" + Date.now(),
-  items: items,
-  total: total,
-  date: new Date().toLocaleDateString(),
-  delivery: new Date(
-    Date.now() + 3 * 24 * 60 * 60 * 1000
-  ).toLocaleDateString(),
-  status: "Pending",   // 🔥 NEW
-};
+    // create order (COD / UPI only reaches here)
+    const newOrder = {
+      id: "ORD" + Date.now(),
+      items: items,
+      total: total,
+      date: new Date().toLocaleDateString(),
+      delivery: new Date(
+        Date.now() + 3 * 24 * 60 * 60 * 1000,
+      ).toLocaleDateString(),
+      status: "Pending",
+      paymentMethod: payment === "cod" ? "Cash on Delivery" : "UPI",
+    };
 
-// save orders
-let orders = JSON.parse(localStorage.getItem("orders")) || [];
-orders.push(newOrder);
-localStorage.setItem("orders", JSON.stringify(orders));
+    // save order
+    let orders = JSON.parse(localStorage.getItem("orders")) || [];
+    orders.push(newOrder);
+    localStorage.setItem("orders", JSON.stringify(orders));
 
-// clear cart
-localStorage.removeItem("cart");
+    // clear cart
+    localStorage.removeItem("cart");
 
-// go to success page with order id
-navigate("/success", { state: newOrder });
+    // go to success page
+    navigate("/success", { state: newOrder });
   };
 
   return (
@@ -90,13 +97,11 @@ navigate("/success", { state: newOrder });
           {items.map((item) => (
             <div className="cart-item" key={item.id}>
               <img src={item.image} alt={item.name} width="80" />
-
               <div>
                 <p>{item.name}</p>
                 <p>₹{item.price}</p>
                 <p>Qty: {item.qty}</p>
               </div>
-
               <button
                 className="remove-btn"
                 onClick={() => removeItem(item.id)}
@@ -110,18 +115,14 @@ navigate("/success", { state: newOrder });
           <h3>Total: ₹{total}</h3>
 
           {/* PROCEED */}
-          <button
-            className="checkout-btn"
-            onClick={() => setShowForm(true)}
-          >
+          <button className="checkout-btn" onClick={() => setShowForm(true)}>
             Proceed to Buy ({items.length} items)
           </button>
 
           {/* FORM */}
           {showForm && (
             <div className="checkout-form">
-
-              {/* 🔥 ERROR MESSAGE */}
+              {/* ERROR MESSAGE */}
               {error && <p className="error">{error}</p>}
 
               <h3>Enter Delivery Details</h3>
@@ -140,6 +141,7 @@ navigate("/success", { state: newOrder });
                 type="text"
                 placeholder="Mobile Number"
                 value={form.mobile}
+                maxLength={10}
                 onChange={(e) => {
                   setForm({ ...form, mobile: e.target.value });
                   setError("");
@@ -160,6 +162,7 @@ navigate("/success", { state: newOrder });
               <h4>Payment Method</h4>
 
               <div className="payment-option-box">
+                {/* COD */}
                 <div
                   className={`pay-box ${payment === "cod" ? "active" : ""}`}
                   onClick={() => {
@@ -170,6 +173,7 @@ navigate("/success", { state: newOrder });
                   Cash on Delivery
                 </div>
 
+                {/* UPI */}
                 <div
                   className={`pay-box ${payment === "upi" ? "active" : ""}`}
                   onClick={() => {
@@ -180,22 +184,37 @@ navigate("/success", { state: newOrder });
                   UPI
                 </div>
 
+                {/* ✅ CARD - validates first, then navigates */}
                 <div
                   className={`pay-box ${payment === "card" ? "active" : ""}`}
                   onClick={() => {
-                    setPayment("card");
                     setError("");
+
+                    // ✅ validate form BEFORE setting payment (state is async)
+                    if (!form.name || !form.mobile || !form.address) {
+                      setError(
+                        "Please fill all details before selecting payment",
+                      );
+                      return;
+                    }
+                    if (form.mobile.length !== 10) {
+                      setError("Mobile must be 10 digits");
+                      return;
+                    }
+
+                    // ✅ form is valid — select card and navigate
+                    setPayment("card");
+                    navigate("/card-payment", {
+                      state: { total, items, form },
+                    });
                   }}
                 >
                   Card
                 </div>
               </div>
 
-              {/* PLACE ORDER */}
-              <button
-                className="checkout-btn"
-                onClick={handlePlaceOrder}
-              >
+              {/* PLACE ORDER (COD / UPI only) */}
+              <button className="checkout-btn" onClick={handlePlaceOrder}>
                 Place Order
               </button>
             </div>
