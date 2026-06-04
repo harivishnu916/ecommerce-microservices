@@ -68,16 +68,24 @@ function Login() {
 
             <p className="forgot">Forgot Password?</p>
 
-            <button type="submit" className="login-btn">
-              Login
-            </button>
+            <button
+  type="button"
+  className="login-btn"
+  onClick={() => navigate("/categories")}
+>
+  Login
+</button>
 
             <p className="signup">
               New to EasyShop?
               <span onClick={() => navigate("/signup")}> Sign Up</span>
             </p>
 
-           <button type="button" className="google-btn">
+           <button
+  type="button"
+  className="google-btn"
+  onClick={() => navigate("/categories")}
+>
   <img src={google1webp} alt="google" />
   <span>Login with Google</span>
 </button>

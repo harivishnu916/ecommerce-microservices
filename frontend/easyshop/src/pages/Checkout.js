@@ -55,6 +55,7 @@ function Checkout() {
     setError("");
 
    // 🆕 create order
+// 🆕 create order
 const newOrder = {
   id: "ORD" + Date.now(),
   items: items,
@@ -63,19 +64,78 @@ const newOrder = {
   delivery: new Date(
     Date.now() + 3 * 24 * 60 * 60 * 1000
   ).toLocaleDateString(),
-  status: "Pending",   // 🔥 NEW
+  status: "Pending",
 };
 
-// save orders
-let orders = JSON.parse(localStorage.getItem("orders")) || [];
-orders.push(newOrder);
-localStorage.setItem("orders", JSON.stringify(orders));
+// CARD PAYMENT
+if (payment === "card") {
+  navigate("/card-payment", {
+    state: {
+      total,
+      items,
+      form,
+    },
+  });
+  return;
+}
 
-// clear cart
+// UPI PAYMENT
+if (payment === "upi") {
+  navigate("/upi-payment", {
+    state: {
+      total,
+      items,
+      form,
+    },
+  });
+  return;
+}
+
+// CASH ON DELIVERY
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+orders.push(newOrder);
+
+localStorage.setItem(
+  "orders",
+  JSON.stringify(orders)
+);
+
 localStorage.removeItem("cart");
 
-// go to success page with order id
-navigate("/success", { state: newOrder });
+navigate("/success", {
+  state: newOrder,
+});
+
+
+
+
+// CARD PAYMENT
+if (payment === "card") {
+  navigate("/card-payment", {
+    state: {
+      total: total,
+      items: items,
+      form: form,
+    },
+  });
+  return;
+}
+
+// UPI PAYMENT
+if (payment === "upi") {
+  navigate("/upi-payment", {
+    state: {
+      total: total,
+      items: items,
+      form: form,
+    },
+  });
+  return;
+}
+
+// CASH ON DELIVERY
+
   };
 
   return (
