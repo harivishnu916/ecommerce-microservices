@@ -1,6 +1,8 @@
 package com.example.demo;
 
 import org.springframework.web.bind.annotation.*;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 
 import java.util.List;
 
@@ -27,5 +29,41 @@ public class OrderController {
     @GetMapping("/{id}")
     public OrderEntity getOrder(@PathVariable Long id) {
         return service.getOrder(id);
+    }
+
+    // Circuit Breaker Test
+    @GetMapping("/test-payment")
+    @CircuitBreaker(
+            name = "paymentService",
+            fallbackMethod = "fallbackResponse"
+    )
+    public String testPayment() {
+
+        throw new RuntimeException("Payment Service Down");
+
+    }
+
+    public String fallbackResponse(Exception ex) {
+
+        return "Payment Service Temporarily Unavailable";
+
+    }
+
+    // Rate Limiter Test
+    @GetMapping("/rate-test")
+    @RateLimiter(
+            name = "orderRateLimiter",
+            fallbackMethod = "rateLimitFallback"
+    )
+    public String rateTest() {
+
+        return "Request Accepted";
+
+    }
+
+    public String rateLimitFallback(Exception ex) {
+
+        return "Too Many Requests. Please Try Again Later.";
+
     }
 }
