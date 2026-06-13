@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./signup.css";
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios";
 function Signup() {
   const navigate = useNavigate();
 
@@ -12,7 +12,31 @@ function Signup() {
     mobile: "",
     address: "",
   });
+const handleSignup = async (e) => {
+  e.preventDefault();
 
+  if (!user.email || !user.password) {
+    alert("Email and Password required");
+    return;
+  }
+
+  try {
+    await axios.post(
+      "http://localhost:8080/auth/signup",
+      {
+        email: user.email,
+        password: user.password,
+      }
+    );
+
+    alert("Signup Successful");
+    navigate("/login");
+
+  } catch (error) {
+    console.error(error);
+    alert("Signup Failed");
+  }
+};
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
@@ -57,7 +81,7 @@ function Signup() {
       <h1>Welcome to EasyShop</h1>
       <h3>Create Account</h3>
 
-      <form onSubmit={handleSubmit} className="signup-form">
+      <form onSubmit={handleSignup} className="signup-form">
 
   {error && <p className="error">{error}</p>}
 

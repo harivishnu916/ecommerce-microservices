@@ -8,19 +8,24 @@ function Navbar() {
   const [cartCount, setCartCount] = useState(0);
   const [wishCount, setWishCount] = useState(0);
 useEffect(() => {
-  const updateCounts = () => {
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+  const updateCounts = async () => {
+    try {
+      // Cart count from backend
+      const res = await fetch("http://localhost:8081/cart");
+      const cart = await res.json();
 
-    setCartCount(cart.length);
-    setWishCount(wishlist.length);
+      // Wishlist count from localStorage
+      const wishlist =
+        JSON.parse(localStorage.getItem("wishlist")) || [];
+
+      setCartCount(cart.length);
+      setWishCount(wishlist.length);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   updateCounts();
-
-  window.addEventListener("storage", updateCounts);
-
-  return () => window.removeEventListener("storage", updateCounts);
 }, []);
  
 

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../index.css";
 import Ecommercepng from "../assets/Ecommerce.png";
 import google1webp from "../assets/google1.webp";
-
+import axios from "axios";
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -11,20 +11,41 @@ function Login() {
 
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
-    e.preventDefault();
+ const handleLogin = async (e) => {
+  e.preventDefault();
 
-    if (!email || !password) {
-      alert("Please enter email and password");
+  if (!email || !password) {
+    alert("Please enter email and password");
+    return;
+  }
+
+  try {
+    const response = await axios.post(
+      "http://localhost:8080/auth/login",
+      {
+        email,
+        password,
+      }
+    );
+
+    const token = response.data;
+
+    if (token === "Invalid credentials") {
+      alert("Invalid Email or Password");
       return;
     }
 
-    // temporary login storage
-    localStorage.setItem("user", JSON.stringify({ email }));
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", email);
 
-    // go to home page
-    navigate("/");
-  };
+    alert("Login Successful");
+
+    navigate("/categories");
+  } catch (error) {
+    console.error(error);
+    alert("Login Failed");
+  }
+};
 
   return (
     <div className="login-page">
@@ -68,11 +89,7 @@ function Login() {
 
             <p className="forgot">Forgot Password?</p>
 
-            <button
-  type="button"
-  className="login-btn"
-  onClick={() => navigate("/categories")}
->
+  <button type="submit" className="login-btn">
   Login
 </button>
 
