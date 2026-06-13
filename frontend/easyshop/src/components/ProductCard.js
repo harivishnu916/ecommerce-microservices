@@ -67,9 +67,17 @@ function ProductCard({ product }) {
   return (
     <div className="card">
       {/* IMAGE */}
-      <div className="img-box">
-        <img src={product.image} alt={product.name} />
-      </div>
+     <div
+  className="img-box"
+  onClick={() =>
+    navigate(`/product/${product.id}`, {
+      state: { product }
+    })
+  }
+  style={{ cursor: "pointer" }}
+>
+  <img src={product.image} alt={product.name} />
+</div>
 
       {/* DETAILS */}
       <h3>{product.name}</h3>

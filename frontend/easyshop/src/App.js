@@ -9,12 +9,15 @@ import Checkout from "./pages/Checkout";
 import Success from "./pages/Success";
 import Orders from "./pages/Orders";
 import Login from "./pages/Login";
-
+import ProductDetail from "./pages/ProductDetails";
+import CardPaymentPage from "./pages/CardPaymentPage";
+import UpiPaymentPage from "./pages/UpiPaymentPage";
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
 
         <Route path="/orders" element={<Orders />} />
         <Route path="/success" element={<Success />} />

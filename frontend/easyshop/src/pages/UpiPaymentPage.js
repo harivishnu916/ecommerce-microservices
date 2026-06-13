@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-
+import axios from "axios";
 export default function UpiPaymentPage() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -43,39 +43,55 @@ export default function UpiPaymentPage() {
     }
     return "";
   };
+const handlePay = async () => {
+  const err = validateUpi(upiId);
 
-  const handlePay = () => {
-    const err = validateUpi(upiId);
-    if (err) {
-      setUpiError(err);
-      return;
-    }
+  if (err) {
+    setUpiError(err);
+    return;
+  }
 
+  try {
     setLoading(true);
-    setTimeout(() => {
-      const order = {
-        id: "ORD" + Date.now(),
-        items: items,
-        total: amount,
-        date: new Date().toLocaleDateString(),
-        delivery: new Date(
-          Date.now() + 3 * 24 * 60 * 60 * 1000,
-        ).toLocaleDateString(),
-        status: "Pending",
+
+    // 1. Create Order
+    const orderResponse = await axios.post(
+      "http://localhost:8083/orders",
+      {
+        productId: 1, // temporary
+        quantity: 1,
+        amount: amount,
+        status: "CREATED"
+      }
+    );
+
+    const orderId = orderResponse.data.id;
+
+    // 2. Create Payment
+    const paymentResponse = await axios.post(
+      "http://localhost:8084/payments",
+      {
+        orderId: orderId,
+        amount: amount,
         paymentMethod: "UPI",
-        upiId: upiId,
-        customerName: form.name || "",
-        customerMobile: form.mobile || "",
-        customerAddress: form.address || "",
-      };
-      const orders = JSON.parse(localStorage.getItem("orders")) || [];
-      orders.push(order);
-      localStorage.setItem("orders", JSON.stringify(orders));
-      localStorage.removeItem("cart");
-      setLoading(false);
-      navigate("/success", { state: order, replace: true });
-    }, 2000);
-  };
+        paymentStatus: "SUCCESS"
+      }
+    );
+
+    setLoading(false);
+
+    navigate("/success", {
+      state: {
+        ...paymentResponse.data,
+        amount: amount
+      }
+    });
+
+  } catch (error) {
+    console.log(error);
+    setLoading(false);
+  }
+};
 
   return (
     <div style={styles.page}>

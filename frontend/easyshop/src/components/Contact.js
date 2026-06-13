@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import "./styles.css";
 
 function Contact() {
+  const [success, setSuccess] = useState("");
+
+  const handleSubmit = () => {
+    setSuccess(
+      "✅ Thank you for contacting us. Our support team will get back to you soon."
+    );
+  };
+
   return (
     <div className="contact">
       <h2>NEED ASSISTANCE?</h2>
@@ -12,7 +20,20 @@ function Contact() {
       <input placeholder="Phone number" />
       <textarea placeholder="Message"></textarea>
 
-      <button>Send</button>
+      <button onClick={handleSubmit}>Send</button>
+
+      {success && (
+        <p
+          style={{
+            color: "green",
+            marginTop: "15px",
+            fontWeight: "bold",
+            textAlign: "center",
+          }}
+        >
+          {success}
+        </p>
+      )}
     </div>
   );
 }

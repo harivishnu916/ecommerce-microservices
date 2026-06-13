@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-
+import axios from "axios";
 const cardBrands = {
   visa: { pattern: /^4/, label: "VISA", color: "#1a1f71" },
   mastercard: { pattern: /^5[1-5]/, label: "MC", color: "#eb001b" },
@@ -279,42 +279,55 @@ export default function CardPaymentPage() {
     return e;
   };
 
-  const handlePay = () => {
-    const e = validate();
-    if (Object.keys(e).length) {
-      setErrors(e);
-      return;
-    }
+const handlePay = async () => {
+  const e = validate();
 
+  if (Object.keys(e).length) {
+    setErrors(e);
+    return;
+  }
+
+  try {
     setLoading(true);
-    setTimeout(() => {
-      // ✅ Save order to localStorage
-      const order = {
-        id: "ORD" + Date.now(),
-        items: items,
-        total: amount,
-        date: new Date().toLocaleDateString(),
-        delivery: new Date(
-          Date.now() + 3 * 24 * 60 * 60 * 1000,
-        ).toLocaleDateString(),
-        status: "Pending",
-        paymentMethod: "Card",
-        customerName: form.name || "",
-        customerMobile: form.mobile || "",
-        customerAddress: form.address || "",
-      };
 
-      const orders = JSON.parse(localStorage.getItem("orders")) || [];
-      orders.push(order);
-      localStorage.setItem("orders", JSON.stringify(orders));
-      localStorage.removeItem("cart");
+    // 1. Create Order
+    const orderResponse = await axios.post(
+      "http://localhost:8083/orders",
+      {
+        productId: 1, // temporary
+        quantity: 1,
+        amount: amount,
+        status: "CREATED"
+      }
+    );
 
-      setLoading(false);
+    const orderId = orderResponse.data.id;
 
-      // ✅ Go directly to success — no intermediate screen
-      navigate("/success", { state: order, replace: true });
-    }, 2000);
-  };
+    // 2. Create Payment
+    const paymentResponse = await axios.post(
+      "http://localhost:8084/payments",
+      {
+        orderId: orderId,
+        amount: amount,
+        paymentMethod: "CARD",
+        paymentStatus: "SUCCESS"
+      }
+    );
+
+    setLoading(false);
+
+    navigate("/success", {
+      state: {
+        ...paymentResponse.data,
+        amount: amount
+      }
+    });
+
+  } catch (error) {
+    console.log(error);
+    setLoading(false);
+  }
+};
 
   return (
     <div style={styles.page}>

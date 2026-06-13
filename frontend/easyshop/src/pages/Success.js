@@ -32,15 +32,21 @@ function Success() {
       <div className="success-card">
         <h1>🎉 Order Placed!</h1>
 
-        <p>
-          <strong>Order ID:</strong> {order.id}
-        </p>
-        <p>
-          <strong>Total:</strong> ₹{order.total}
-        </p>
-        <p>
-          <strong>Delivery By:</strong> {order.delivery}
-        </p>
+      <p>
+  <strong>Order ID:</strong> {order.id}
+</p>
+
+<p>
+  <strong>Amount:</strong> ₹{order.amount}
+</p>
+
+<p>
+  <strong>Payment Method:</strong> {order.paymentMethod}
+</p>
+
+<p>
+  <strong>Status:</strong> {order.paymentStatus}
+</p>
 
         {/* ✅ replace:true so they can't go back to checkout/card page */}
         <button onClick={() => navigate("/", { replace: true })}>

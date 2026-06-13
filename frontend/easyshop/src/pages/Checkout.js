@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { useLocation } from "react-router-dom";
 function Checkout() {
   const [items, setItems] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [payment, setPayment] = useState("");
-
+const location = useLocation();
   const [form, setForm] = useState({
     name: "",
     mobile: "",
@@ -16,11 +16,26 @@ function Checkout() {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    setItems(cart);
-  }, []);
+useEffect(() => {
 
+  // Buy Now flow
+  if (location.state?.buyNowItem) {
+    setItems([
+      {
+        ...location.state.buyNowItem,
+        quantity: 1,
+      },
+    ]);
+    return;
+  }
+
+  // Cart flow
+  fetch("http://localhost:8081/cart")
+    .then((res) => res.json())
+    .then((data) => setItems(data))
+    .catch((err) => console.log(err));
+
+}, [location.state]);
   // ❌ REMOVE ITEM
   const removeItem = (id) => {
     const updated = items.filter((item) => item.id !== id);
@@ -31,7 +46,7 @@ function Checkout() {
   // ✅ TOTAL
   const total = items.reduce((sum, item) => {
     const price = Number(item.price) || 0;
-    const qty = item.qty || 1;
+    const qty = item.quantity || 1;
     return sum + price * qty;
   }, 0);
 
@@ -60,6 +75,9 @@ const newOrder = {
   id: "ORD" + Date.now(),
   items: items,
   total: total,
+  amount: total,                 // ADD
+  paymentMethod: "Cash On Delivery", // ADD
+  paymentStatus: "PENDING",      // ADD
   date: new Date().toLocaleDateString(),
   delivery: new Date(
     Date.now() + 3 * 24 * 60 * 60 * 1000
@@ -154,7 +172,7 @@ if (payment === "upi") {
               <div>
                 <p>{item.name}</p>
                 <p>₹{item.price}</p>
-                <p>Qty: {item.qty}</p>
+                <p>Qty: {item.quantity || 1}</p>
               </div>
 
               <button

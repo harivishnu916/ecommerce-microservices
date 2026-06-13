@@ -4,6 +4,9 @@ import axios from "axios";
 
 function Cart() {
   const [cart, setCart] = useState([]);
+  useEffect(() => {
+  console.log("Cart:", cart);
+}, [cart]);
   const navigate = useNavigate();
 
   // Load cart from backend
