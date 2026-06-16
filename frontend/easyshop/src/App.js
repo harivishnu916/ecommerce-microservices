@@ -9,17 +9,24 @@ import Checkout from "./pages/Checkout";
 import Success from "./pages/Success";
 import Orders from "./pages/Orders";
 import Login from "./pages/Login";
-import CardPaymentPage from "./pages/CardPayment";
-import UpiPaymentPage from "./pages/UpiPayment";
+import ProductDetail from "./pages/ProductDetails";
+import CardPaymentPage from "./pages/CardPaymentPage";
+import UpiPaymentPage from "./pages/UpiPaymentPage";
+import ForgotPassword from "./pages/ForgotPassword";
+import VerifyOtp from "./pages/VerifyOtp";
+import ResetPassword from "./pages/ResetPassword";
 function App() {
   return (
     <BrowserRouter>
-      <Routes> 
+      <Routes>
+        
+<Route path="/forgot-password" element={<ForgotPassword />} />
+<Route path="/verify-otp" element={<VerifyOtp />} />
+<Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/card-payment" element={<CardPaymentPage />} />
-        <Route path="/upi-payment" element={<UpiPaymentPage />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
+
         <Route path="/orders" element={<Orders />} />
-       
         <Route path="/success" element={<Success />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/wishlist" element={<Wishlist />} />
@@ -28,6 +35,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/categories" element={<Categories />} />
         <Route path="/products/:category" element={<ProductList />} />
+        <Route path="/card-payment" element={<CardPaymentPage />} />
+        <Route path="/upi-payment" element={<UpiPaymentPage />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,35 +1,54 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios";
 
 function Cart() {
   const [cart, setCart] = useState([]);
-const navigate = useNavigate();
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("cart")) || [];
-    setCart(data);
+  console.log("Cart:", cart);
+}, [cart]);
+  const navigate = useNavigate();
+
+  // Load cart from backend
+  useEffect(() => {
+    axios
+      .get("http://localhost:8081/cart")
+      .then((res) => {
+        setCart(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
-  const removeItem = (id) => {
-    const updated = cart.filter((item) => item.id !== id);
-    setCart(updated);
-    localStorage.setItem("cart", JSON.stringify(updated));
+  // Remove item from backend
+  const removeItem = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8081/cart/${id}`);
+
+      setCart(cart.filter((item) => item.id !== id));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
+  // Quantity (frontend only for now)
   const changeQty = (id, type) => {
     const updated = cart.map((item) => {
       if (item.id === id) {
-        if (type === "inc") item.qty += 1;
-        if (type === "dec" && item.qty > 1) item.qty -= 1;
+        if (type === "inc") item.quantity += 1;
+        if (type === "dec" && item.quantity > 1) item.quantity -= 1;
       }
       return item;
     });
 
-    setCart(updated);
-    localStorage.setItem("cart", JSON.stringify(updated));
+    setCart([...updated]);
   };
 
-  const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  const total = cart.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
 
   return (
     <div className="container">
@@ -41,24 +60,25 @@ const navigate = useNavigate();
         <>
           {cart.map((item) => (
             <div className="cart-item" key={item.id}>
-              
-              {/* IMAGE */}
               <img src={item.image} alt={item.name} />
 
-              {/* DETAILS */}
               <div className="cart-details">
                 <h4>{item.name}</h4>
                 <p>₹{item.price}</p>
 
-                {/* QUANTITY */}
                 <div className="qty-box">
-                  <button onClick={() => changeQty(item.id, "dec")}>-</button>
-                  <span>{item.qty}</span>
-                  <button onClick={() => changeQty(item.id, "inc")}>+</button>
+                  <button onClick={() => changeQty(item.id, "dec")}>
+                    -
+                  </button>
+
+                  <span>{item.quantity}</span>
+
+                  <button onClick={() => changeQty(item.id, "inc")}>
+                    +
+                  </button>
                 </div>
               </div>
 
-              {/* REMOVE */}
               <button
                 className="remove-btn"
                 onClick={() => removeItem(item.id)}
@@ -68,16 +88,15 @@ const navigate = useNavigate();
             </div>
           ))}
 
-          {/* 🔥 TOTAL + CHECKOUT */}
           <div className="cart-summary">
             <h3>Total: ₹{total}</h3>
 
-           <button
-  className="checkout-btn"
-  onClick={() => navigate("/checkout")}
->
-  Proceed to Checkout
-</button>
+            <button
+              className="checkout-btn"
+              onClick={() => navigate("/checkout")}
+            >
+              Proceed to Checkout
+            </button>
           </div>
         </>
       )}
