@@ -771,7 +771,10 @@ body {
   border-radius: 6px;
   cursor: pointer;
 }
-
+.forgot {
+  cursor: pointer;
+  color: blue;
+}
 
 /* RESET */
 body, #root {

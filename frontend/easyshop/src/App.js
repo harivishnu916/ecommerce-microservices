@@ -12,10 +12,17 @@ import Login from "./pages/Login";
 import ProductDetail from "./pages/ProductDetails";
 import CardPaymentPage from "./pages/CardPaymentPage";
 import UpiPaymentPage from "./pages/UpiPaymentPage";
+import ForgotPassword from "./pages/ForgotPassword";
+import VerifyOtp from "./pages/VerifyOtp";
+import ResetPassword from "./pages/ResetPassword";
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        
+<Route path="/forgot-password" element={<ForgotPassword />} />
+<Route path="/verify-otp" element={<VerifyOtp />} />
+<Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/login" element={<Login />} />
         <Route path="/product/:id" element={<ProductDetail />} />
 
